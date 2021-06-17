@@ -7,17 +7,17 @@ import 'notifs.dart';
 
 //main runs the launch screen
 Future<void> main() async {
-  runApp(MyApp());
+  runApp(SoQuoApp());
 }
 
-//lol idk
-class MyApp extends StatelessWidget {
+//app class
+class SoQuoApp extends StatelessWidget {
+
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
         child: MaterialApp(
-          theme: ThemeData(fontFamily: 'Monteserat'),
-          home: SoQuoApp(),
+          home: HomePage(),
           debugShowCheckedModeBanner: false,
         ),
         providers: [
@@ -26,16 +26,31 @@ class MyApp extends StatelessWidget {
   }
 }
 
-//app class
-class SoQuoApp extends StatefulWidget{
-  SoQuoApp();
+//app that runs from notifications
+class FromNotifs extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MultiProvider(
+        child: MaterialApp(
+          home: PollPage(),
+          debugShowCheckedModeBanner: false,
+        ),
+        providers: [
+          ChangeNotifierProvider(create: (_) => NotificationService())
+        ]);
+  }
+}
+
+//homepage class
+class HomePage extends StatefulWidget{
+  HomePage();
 
   @override
-  _SoQuoAppState createState() => _SoQuoAppState();
+  _HomePageState createState() => _HomePageState();
 }
 
 //app state class
-class _SoQuoAppState extends State<SoQuoApp> {
+class _HomePageState extends State<HomePage> {
   FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = new FlutterLocalNotificationsPlugin();
 
   @override
@@ -45,60 +60,46 @@ class _SoQuoAppState extends State<SoQuoApp> {
   }
 
   @override
-  Widget build(BuildContext context)
-  {
-    return Scaffold(
-      body: Consumer<NotificationService>(
-        builder: (context, model, _) =>
-        Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              ElevatedButton(
-                onPressed: () => model.instantNotification(),
-                child: Text('Instant Notification')
-              ),
-            ]
-        )
-      )
-    );
-  }
-}
-
-//homepage
-class HomePage extends StatelessWidget
-{
-  HomePage();
-
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: defaultAB,
       body: Center(
         child: Column(
           children: [
-            Image.asset('assets/logo_placeholder.jpg'),
-            SizedBox(height: 30.0),
-            ElevatedButton(
-              style: ovalButton,
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => QuotientPage()),
-                );
-              },
-              child: Text("Log in", style: buttonStyle)
+            Image.asset('assets/logo.png',
+                height: 300.0,
+                width: 300.0,
             ),
             SizedBox(height: 30.0),
             ElevatedButton(
-              style: ovalButton,
-              onPressed: () {},
-              child: Text("Help", style: buttonStyle)
+                style: ovalButton,
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => QuotientPage()),
+                  );
+                },
+                child: Text("Log in", style: buttonStyle)
+            ),
+            SizedBox(height: 30.0),
+            ElevatedButton(
+                style: ovalButton,
+                onPressed: () {},
+                child: Text("Help", style: buttonStyle)
             )],
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
         ),
       ),
-      backgroundColor: bg,
+      floatingActionButton: Consumer<NotificationService>(
+        builder: (context, model, _) =>
+          FloatingActionButton(
+            onPressed: () => model.instantNotification(),
+            child: Icon(Icons.announcement_rounded),
+            backgroundColor: darkAccent,
+          ),
+      ),
+      backgroundColor: Colors.white,
     );
   }
 }
@@ -162,7 +163,7 @@ class QuotientPage extends StatelessWidget {
           ),
         ],
       ),
-      backgroundColor: bg,
+      backgroundColor: Colors.white,
     );
   }
 }
@@ -175,7 +176,7 @@ class PollPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: ab,
+        backgroundColor: darkAccent,
       ),
       body: Center(
         child: Column(
@@ -189,23 +190,47 @@ class PollPage extends StatelessWidget {
               height: 30,
             ),
             Center(
-              child: ImageButton(
-                "assets/polling/neutral.png",
-                "no change",
-                50.0
-              ),
+              child: neutralButton
             ),
-          ]
-        ),
+            SizedBox(height: 30),
+            Row(
+              children: [
+                Column(
+                  children: [
+                    happyButton,
+                    SizedBox(height: 30.0),
+                    calmButton,
+                    SizedBox(height: 30.0),
+                    stressedButton,
+                    SizedBox(height: 30.0),
+                    angryButton,
+                    SizedBox(height: 30.0)
+                ]),
+                SizedBox(width: 75.0),
+                Column(
+                  children: [
+                    excitedButton,
+                    SizedBox(height: 30.0),
+                    sadButton,
+                    SizedBox(height: 30.0),
+                    owButton,
+                    SizedBox(height: 30.0),
+                    scaredButton,
+                    SizedBox(height: 30.0)
+                ]),
+              ],
+              mainAxisAlignment: MainAxisAlignment.center,
+            ),
+        ]),
       ),
-      backgroundColor: bg,
+      backgroundColor: Colors.white,
     );
   }
 }
 
 //styles
 final ButtonStyle ovalButton = ElevatedButton.styleFrom(
-  primary: accent,
+  primary: lightAccent,
   fixedSize: Size(300, 64),
   padding: EdgeInsets.symmetric(horizontal: 16.0),
   shape: RoundedRectangleBorder(
@@ -216,35 +241,35 @@ final ButtonStyle ovalButton = ElevatedButton.styleFrom(
 final TextStyle titleStyle = TextStyle(
   fontWeight: FontWeight.w300,
   fontSize: 36.0,
-  color: Colors.black54,
+  color: darkAccent,
 );
 
 final TextStyle buttonStyle = TextStyle(
   fontWeight: FontWeight.w300,
   fontSize: 30.0,
-  color: Colors.black54,
+  color: Colors.white,
   fontStyle: FontStyle.italic,
 );
 
 final TextStyle labelStyle = TextStyle(
   fontSize: 18.0,
   fontStyle: FontStyle.italic,
-  color: Colors.black54,
+  color: darkAccent,
 );
 
 final TextStyle bodyStyle = TextStyle(
   fontSize: 18.0,
   height: 1.5,
-  color: Colors.black54,
+  color: darkAccent,
 );
 
 final AppBar defaultAB = AppBar(
-  backgroundColor: ab,
+  backgroundColor: darkAccent,
 );
 
-final Color bg = new Color(0xFF7FC1B2);
-final Color ab = new Color(0xFF3C9378);
-final Color accent = new Color(0xFF70E2C4);
+final Color base = new Color(0xff0abed5);
+final Color darkAccent = new Color(0xff0ea0b2);
+final Color lightAccent = new Color(0xFF2ee0f7);
 
 //image with label
 class ImageLabel extends StatelessWidget {
@@ -286,6 +311,53 @@ class ImageButton extends StatelessWidget {
   }
 }
 
+//imagebuttons for emotions
+final ImageButton neutralButton = new ImageButton(
+    "assets/polling/neutral.png",
+    "no change",
+    50.0);
+
+final ImageButton happyButton = new ImageButton(
+    "assets/polling/happy.png",
+    "happy",
+    50.0);
+
+final ImageButton excitedButton = new ImageButton(
+    "assets/polling/excited.png",
+    "excited",
+    50.0);
+
+final ImageButton calmButton = new ImageButton(
+    "assets/polling/calm.png",
+    "calm",
+    50.0);
+
+final ImageButton sadButton = new ImageButton(
+    "assets/polling/sad.png",
+    "sad",
+    50.0);
+
+final ImageButton stressedButton = new ImageButton(
+    "assets/polling/stressed.png",
+    "stressed",
+    50.0);
+
+final ImageButton owButton = new ImageButton(
+    "assets/polling/overwhelmed.png",
+    "overwhelmed",
+    50.0);
+
+final ImageButton angryButton = new ImageButton(
+    "assets/polling/angry.png",
+    "angry",
+    50.0);
+
+final ImageButton scaredButton = new ImageButton(
+    "assets/polling/scared.png",
+    "scared",
+    50.0);
+
+
 //ring shape painter
 class RingPainter extends CustomPainter {
   double h = 0.0, w = 0.0, start = 0.0, sweep = 0.0;
@@ -303,7 +375,7 @@ class RingPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     Paint paint = Paint()
-      ..color = accent
+      ..color = lightAccent
       ..style = PaintingStyle.stroke
       ..strokeWidth = 36.0
       ..strokeCap = StrokeCap.round;
