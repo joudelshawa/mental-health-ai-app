@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "303767421958",
+    "project_id": "soquo-8d1a1",
+    "storage_bucket": "soquo-8d1a1.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:303767421958:android:e73c43a31549fa338caf87",
+        "android_client_info": {
+          "package_name": "com.example.app_code"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "303767421958-0jv1l0vcverd8jqek8f064ce09n3pmch.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDonaPVSh6d3AwWlQ-FjWzsN52c73ELA0E"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "303767421958-0jv1l0vcverd8jqek8f064ce09n3pmch.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
