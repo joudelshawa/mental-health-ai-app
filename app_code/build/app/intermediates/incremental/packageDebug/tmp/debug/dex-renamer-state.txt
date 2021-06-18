@@ -1,0 +1,4 @@
+#Thu Jun 17 00:34:44 EDT 2021
+base.0=D\:\\OneDrive - The University of Western Ontario\\Documents\\GitHub\\mental-health-ai-app\\app_code\\build\\app\\intermediates\\dex\\debug\\mergeDexDebug\\classes.dex
+renamed.0=classes.dex
+path.0=classes.dex
