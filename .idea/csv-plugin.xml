@@ -24,6 +24,13 @@
             </Attribute>
           </value>
         </entry>
+        <entry key="\sample_1000_shuffled.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
         <entry key="\sample_shuffled.csv">
           <value>
             <Attribute>
