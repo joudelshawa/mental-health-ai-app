@@ -24,7 +24,7 @@ import pandas as pd
 from sklearn.model_selection import train_test_split
 import pickle
 
-subset = pd.read_csv('sample_1000_shuffled.csv',lineterminator='\n')
+subset = pd.read_csv('all_shuffled.csv',lineterminator='\n')
 
 # tweets = subset['Tweet Preprocessed'].values.tolist()
 # categories = subset['Category'].values.tolist()
@@ -47,13 +47,12 @@ categories = res[0]
 # print(categories)
 
 # '''splitting data in 3 parts'''
-title_tr, title_te, category_tr, category_te = train_test_split(tweets, categories)
-title_tr, title_de, category_tr, category_de = train_test_split(title_tr,category_tr)
-print("Training: ",len(title_tr))
-print("Developement: ",len(title_de),)
-print("Testing: ",len(title_te))
+title_tr, title_te, category_tr, category_te = train_test_split(tweets, categories, random_state=0)
+title_tr, title_de, category_tr, category_de = train_test_split(title_tr, category_tr, random_state=0)
+print("Training: ", len(title_tr))
+print("Development: ", len(title_de),)
+print("Testing: ", len(title_te))
 
-'''skipped word cloud stuff'''
 
 # "vectorization of data using bag of words"
 tokenizer = nltk.tokenize.RegexpTokenizer(r"\w+")
@@ -74,7 +73,7 @@ Yde = encoder.transform(category_de)
 Yte = encoder.transform(category_te)
 
 ''''feature reduction !!!'''
-print("Number of features before reduction : ", Xtr.shape[1])
+print("Number of features before reduction : ", Xtr.shape[1], Xde.shape[1], Xte.shape[1])
 selection = VarianceThreshold(threshold=0.001)
 Xtr_whole = copy.deepcopy(Xtr)
 Ytr_whole = copy.deepcopy(Ytr)
@@ -82,7 +81,7 @@ selection.fit(Xtr)
 Xtr = selection.transform(Xtr)
 Xde = selection.transform(Xde)
 Xte = selection.transform(Xte)
-print("Number of features after reduction : ", Xtr.shape[1])
+print("Number of features after reduction : ", Xtr.shape[1], Xde.shape[1], Xte.shape[1])
 
 '''''sampling data'''
 # count number of diff labels in dataset and plot
@@ -149,32 +148,32 @@ if (nb.score(Xde, Yde) > highest_prec_val):
     highest_prec_model = 'naive bayes'
 
 # support vector classification
-# print("support vector classification")
-# from sklearn.svm import SVC
-# svc = SVC()
-# svc.fit(Xtr, Ytr)
-# pred = svc.predict(Xde)
-# print(classification_report(Yde, pred, target_names=encoder.classes_))
-# if (svc.score(Xde, Yde) > highest_prec_val):
-#     highest_prec_val = svc.score(Xde, Yde)
-#     highest_prec_model = 'svc'
+print("support vector classification")
+from sklearn.svm import SVC
+svc = SVC()
+svc.fit(Xtr, Ytr)
+pred = svc.predict(Xde)
+print(classification_report(Yde, pred, target_names=encoder.classes_))
+if (svc.score(Xde, Yde) > highest_prec_val):
+    highest_prec_val = svc.score(Xde, Yde)
+    highest_prec_model = 'svc'
 
 # multilayered perceptron
-# print("multilayered perceptron")
-# mlp = MLPClassifier(solver='adam', alpha=1e-5, hidden_layer_sizes=(100, 20), random_state=1, max_iter=400)
-# mlp.fit(Xtr, Ytr)
-# pred = mlp.predict(Xde)
-# print(classification_report(Yde, pred, target_names=encoder.classes_))
-# if (mlp.score(Xde,Yde) > highest_prec_val):
-#     highest_prec_val = mlp.score(Xde, Yde)
-#     highest_prec_model = 'multilayered perceptron'
-#
-# ''''ADD BEST MODEL DEPENDING ON RESULTS'''
-# #maybe multinomial naive bayes??
-# '''predicting test data'''
-# pred = nb.predict(Xte)
-# print(classification_report(Yte, pred, target_names=encoder.classes_))
-# sns.heatmap(confusion_matrix(Yte, pred))
+print("multilayered perceptron")
+mlp = MLPClassifier(solver='adam', alpha=1e-5, hidden_layer_sizes=(100, 20), random_state=1, max_iter=400)
+mlp.fit(Xtr, Ytr)
+pred = mlp.predict(Xde)
+print(classification_report(Yde, pred, target_names=encoder.classes_))
+if (mlp.score(Xde,Yde) > highest_prec_val):
+    highest_prec_val = mlp.score(Xde, Yde)
+    highest_prec_model = 'multilayered perceptron'
+
+''''ADD BEST MODEL DEPENDING ON RESULTS'''
+#maybe multinomial naive bayes??
+'''predicting test data'''
+pred = nb.predict(Xte)
+print(classification_report(Yte, pred, target_names=encoder.classes_))
+sns.heatmap(confusion_matrix(Yte, pred))
 
 
 '''why multinomial naive bayes is good'''
@@ -205,6 +204,29 @@ print("final results")
 print(highest_prec_val, "with", highest_prec_model)
 
 # save the model to disk
-filename = 'finalized_model.pkl'
-print(dt.score(Xtr, Ytr))
+filename = 'decisiontree.pkl'
 pickle.dump(dt, open(filename, 'wb'))
+
+filename = 'dummyclassifier.pkl'
+pickle.dump(dc, open(filename, 'wb'))
+
+filename = 'randomforest.pkl'
+pickle.dump(rf, open(filename, 'wb'))
+
+filename = 'svc.pkl'
+pickle.dump(svc, open(filename, 'wb'))
+
+filename = 'naivebayesian.pkl'
+pickle.dump(nb, open(filename, 'wb'))
+
+filename = 'perceptron.pkl'
+pickle.dump(mlp, open(filename, 'wb'))
+
+filename = 'selection.pkl'
+pickle.dump(selection, open(filename, 'wb'))
+
+filename = 'vectorizer.pkl'
+pickle.dump(vectorizer, open(filename, 'wb'))
+
+filename = 'encoder.pkl'
+pickle.dump(encoder, open(filename, 'wb'))

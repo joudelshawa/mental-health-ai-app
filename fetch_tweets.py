@@ -3,10 +3,10 @@ import csv
 '''' authentication function '''
 def twitter_auth():
     try:
-        consumer_key = 'vTJwEoiaNx0RpHHlfRjSfKMwI'
-        consumer_secret = 'ovChqGW35Hdken31HoKIFr6DPRLmL9aaJnEl9O9irXLUB9tQFM'
-        access_token = '1014489193-9D7oZPGOvmkTfmcmb6MbIhYts2ES1cCjTtdZFXl'
-        access_secret = 'LK2e7qU4gI6hin7XU1kVyhtBY96ARRyUQdLp8Gs7iX9YT'
+        consumer_key = '*'
+        consumer_secret = '*'
+        access_token = '*'
+        access_secret = '*'
     except KeyError:
         sys.stderr.write("TWITTER_* environment variable not set\n")
         sys.exit(1)
