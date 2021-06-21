@@ -31,7 +31,7 @@ import pickle
 VAR_THRESH = 0.001
 N_EST = 40
 
-subset = pd.read_csv('sample_1000_shuffled.csv', lineterminator='\n')  # import training data as pd dataframe
+subset = pd.read_csv('all_shuffled.csv', lineterminator='\n')  # import training data as pd dataframe
 
 # extract sorted csv data
 categories = subset['Category'].values.astype('U').tolist()
