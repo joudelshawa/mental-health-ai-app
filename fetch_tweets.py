@@ -33,9 +33,10 @@ if __name__ == '__main__':
     # user = input("Enter username: ")
     user = "joudelshawa"
     client = get_twitter_client()
-    with open('data_new.csv', 'w', newline='', encoding='utf-8') as f:
+    with open('real_time_tweets.csv', 'w', newline='', encoding='utf-8') as f:
         writer = csv.writer(f, delimiter=',')
         writer.writerow(['Tweet'])
         for status in tweepy.Cursor(client.home_timeline, screen_name=user).items(NUM_TWEETS):
             print(status.text, '\n')
             writer.writerow([status.text])  # puts data in a csv file
+    print("done")
