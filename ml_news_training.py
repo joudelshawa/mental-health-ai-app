@@ -35,7 +35,7 @@ subset = pd.read_csv('all_shuffled.csv', lineterminator='\n')  # import training
 
 # extract sorted csv data
 categories = subset['Category'].values.astype('U').tolist()
-tweets = subset['Tweet Preprocessed\r'].values.astype('U').tolist()
+tweets = subset['Tweet Preprocessed'].values.astype('U').tolist()
 
 '''splitting data into test and train parts'''
 # set random_state = 0 to ensure a deterministic split of data
